@@ -1,7 +1,5 @@
 # 🌐 GaiaNet Node Installation Guide
 
-![GaiaNet Logo](https://via.placeholder.com/150x50?text=GaiaNet+Logo) *(замените на реальный логотип)*
-
 ## ⚙️ System Requirements
 
 | Component | Minimum Specs |
