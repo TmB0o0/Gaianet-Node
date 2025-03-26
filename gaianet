@@ -58,7 +58,11 @@ remove_node() {
     bash <(curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/uninstall.sh) -q
     
     echo "Cleaning up environment variables..."
-    sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.bashrc ~/.zshrc ~/.bash_profile ~/.zprofile
+    sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.bashrc
+    [ -f ~/.zshrc ] && sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.zshrc
+    [ -f ~/.bash_profile ] && sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.bash_profile
+    [ -f ~/.zprofile ] && sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.zprofile
+    
     source ~/.bashrc
     
     echo "Node has been successfully removed. Please restart your shell session."
@@ -67,8 +71,16 @@ remove_node() {
 update_domain() {
     echo -n "Enter the new domain: "
     read new_domain
-    gaianet config --domain "$new_domain"
-    echo "Node domain updated to $new_domain"
+    if gaianet config --domain "$new_domain"; then
+        echo "Node domain updated to $new_domain"
+    else
+        echo "Failed to update node domain. Please check your GaiaNet installation."
+    fi
+}
+
+show_ids() {
+    echo "Retrieving device and node IDs..."
+    gaianet info | grep -E 'Device ID|Node ID'
 }
 
 while true; do
@@ -79,7 +91,8 @@ while true; do
 
     echo -e "${TEAL}[1]${RESET} ➜ Install node"
     echo -e "${TEAL}[2]${RESET} ➜ Remove node"
-    echo -e "${TEAL}[3]${RESET} ➜ Update node domain\n"
+    echo -e "${TEAL}[3]${RESET} ➜ Update node domain"
+    echo -e "${TEAL}[4]${RESET} ➜ Show Device ID and Node ID\n"
 
     # User choice handler
     echo -n "Select an action: "
@@ -89,6 +102,8 @@ while true; do
         1) install_node ;;
         2) remove_node ;;
         3) update_domain ;;
+        4) show_ids ;;
         *) echo "Invalid choice, please try again." ;;
     esac
+
 done
