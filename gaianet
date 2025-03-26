@@ -47,7 +47,7 @@ remove_node() {
     rm -rf "$HOME/gaianet"
     
     echo "Removing GaiaNet binary..."
-    sudo rm -f /usr/local/bin/gaianet"
+    sudo rm -f /usr/local/bin/gaianet
     
     echo "Uninstalling WasmEdge..."
     bash <(curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/uninstall.sh) -q
