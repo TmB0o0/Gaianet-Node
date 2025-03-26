@@ -17,7 +17,7 @@ For persistent operation, use Screen:
 screen -S gaianet
 ```
 
-*Need help with Screen? See our Screen Guide*
+*Need help with Screen? See our Screen Guide https://github.com/TmB0o0/Screen-in-Ubuntu
 
 ### 2. Install GaiaNet Node
 
