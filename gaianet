@@ -1,12 +1,12 @@
 #!/bin/bash
 
-set -e  # Останавливаем скрипт при ошибке
+set -e  # Stop the script on error
 
 WHITE='\e[97m'
 TEAL='\e[36m'
 RESET='\e[0m'
 
-# Логотип
+# Logo
 echo "  ##  ###  #######  ######   #######  #######  #######  ######   #######  ##  ##   #######  ###### "
 echo "  ### ###  ##   ##  ##  ##   ##       ##         ###    ##  ##     ###    ##  ##   ##       ##  ## "
 echo "  #######  ##   ##  ##  ##   ##       #######    ###    ##  ##     ###    ## ##    ##       ##  ## "
@@ -40,8 +40,13 @@ install_node() {
 }
 
 remove_node() {
+    if ! command -v gaianet &> /dev/null; then
+        echo "GaiaNet is not installed. Skipping removal."
+        return
+    fi
+
     echo "Stopping GaiaNet..."
-    gaianet stop
+    gaianet stop || echo "GaiaNet was not running."
     
     echo "Removing GaiaNet base directory..."
     rm -rf "$HOME/gaianet"
@@ -54,35 +59,36 @@ remove_node() {
     
     echo "Cleaning up environment variables..."
     sed -i '/export PATH="$HOME\/gaianet\/bin:\$PATH"/d' ~/.bashrc ~/.zshrc ~/.bash_profile ~/.zprofile
+    source ~/.bashrc
     
     echo "Node has been successfully removed. Please restart your shell session."
 }
 
 update_domain() {
-    echo -n "Введите новый домен: "
+    echo -n "Enter the new domain: "
     read new_domain
     gaianet config --domain "$new_domain"
-    echo "Домен ноды обновлен до $new_domain"
+    echo "Node domain updated to $new_domain"
 }
 
 while true; do
-    # Главное меню
+    # Main menu
     echo -e "\n${WHITE}╔═══════════════════════════════╗${RESET}"
-    echo -e "${WHITE}║        МЕНЮ УПРАВЛЕНИЯ         ║${RESET}"
+    echo -e "${WHITE}║        MANAGEMENT MENU        ║${RESET}"
     echo -e "${WHITE}╚═══════════════════════════════╝${RESET}\n"
 
-    echo -e "${TEAL}[1]${RESET} ➜ Установка ноды"
-    echo -e "${TEAL}[7]${RESET} ➜ Удаление ноды"
-    echo -e "${TEAL}[8]${RESET} ➜ Обновление домена ноды\n"
+    echo -e "${TEAL}[1]${RESET} ➜ Install node"
+    echo -e "${TEAL}[2]${RESET} ➜ Remove node"
+    echo -e "${TEAL}[3]${RESET} ➜ Update node domain\n"
 
-    # Обработчик выбора пользователя
-    echo -n "Выберите действие: "
+    # User choice handler
+    echo -n "Select an action: "
     read choice
 
     case $choice in
         1) install_node ;;
-        7) remove_node ;;
-        8) update_domain ;;
-        *) echo "Неверный выбор, попробуйте снова." ;;
+        2) remove_node ;;
+        3) update_domain ;;
+        *) echo "Invalid choice, please try again." ;;
     esac
 done
