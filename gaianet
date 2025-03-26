@@ -15,16 +15,6 @@ echo "  ##  ###  ##  ###  ### ###  ###      ###  ##    ###    ### ###    ###    
 echo "  ##  ###  ##  ###  ### ###  # #      ###  ##    ###    ### ###    ###    ##  ###  # #      ### ### "
 echo "  ##  ###  #######  #######  #######  #######    ###    ### ###  #######  ##  ###  #######  ### ### "
 
-# Главное меню
-echo -e "\n${WHITE}╔═══════════════════════════════╗${RESET}"
-echo -e "${WHITE}║        МЕНЮ УПРАВЛЕНИЯ         ║${RESET}"
-echo -e "${WHITE}╚═══════════════════════════════╝${RESET}\n"
-
-echo -e "${TEAL}[1]${RESET} ➜ Установка ноды"
-echo -e "${TEAL}[7]${RESET} ➜ Удаление ноды"
-echo -e "${TEAL}[8]${RESET} ➜ Обновление домена ноды\n"
-
-# Функция установки ноды
 install_node() {
     echo "Updating system and installing required packages..."
     sudo apt update -y && sudo apt upgrade -y && sudo apt install screen pciutils -y
@@ -49,7 +39,6 @@ install_node() {
     echo "GaiaNet setup completed successfully!"
 }
 
-# Функция удаления ноды
 remove_node() {
     echo "Stopping GaiaNet..."
     gaianet stop
@@ -58,7 +47,7 @@ remove_node() {
     rm -rf "$HOME/gaianet"
     
     echo "Removing GaiaNet binary..."
-    sudo rm -f /usr/local/bin/gaianet
+    sudo rm -f /usr/local/bin/gaianet"
     
     echo "Uninstalling WasmEdge..."
     bash <(curl -sSf https://raw.githubusercontent.com/WasmEdge/WasmEdge/master/utils/uninstall.sh) -q
@@ -69,7 +58,6 @@ remove_node() {
     echo "Node has been successfully removed. Please restart your shell session."
 }
 
-# Функция обновления домена ноды
 update_domain() {
     echo -n "Введите новый домен: "
     read new_domain
@@ -77,13 +65,24 @@ update_domain() {
     echo "Домен ноды обновлен до $new_domain"
 }
 
-# Обработчик выбора пользователя
-echo -n "Выберите действие: "
-read choice
+while true; do
+    # Главное меню
+    echo -e "\n${WHITE}╔═══════════════════════════════╗${RESET}"
+    echo -e "${WHITE}║        МЕНЮ УПРАВЛЕНИЯ         ║${RESET}"
+    echo -e "${WHITE}╚═══════════════════════════════╝${RESET}\n"
 
-case $choice in
-    1) install_node ;;
-    7) remove_node ;;
-    8) update_domain ;;
-    *) echo "Неверный выбор, попробуйте снова." ;;
-esac
+    echo -e "${TEAL}[1]${RESET} ➜ Установка ноды"
+    echo -e "${TEAL}[7]${RESET} ➜ Удаление ноды"
+    echo -e "${TEAL}[8]${RESET} ➜ Обновление домена ноды\n"
+
+    # Обработчик выбора пользователя
+    echo -n "Выберите действие: "
+    read choice
+
+    case $choice in
+        1) install_node ;;
+        7) remove_node ;;
+        8) update_domain ;;
+        *) echo "Неверный выбор, попробуйте снова." ;;
+    esac
+done
