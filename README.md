@@ -38,7 +38,7 @@ If missed, you can retrieve them later via the menu.
 
 ## 🔗 Node Binding Process
 
-1. Register at [GaiaNet Portal](https://gaianet.ai)
+1. Register at https://gaianet.ai/reward?invite_code=RpxDsn
 2. Go to your **Profile → Nodes** section
 3. Bind your node using the saved IDs
 
